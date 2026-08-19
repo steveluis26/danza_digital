@@ -1,0 +1,9 @@
+# Entorno de pruebas (Playwright + venv)
+.venv_test/
+test_out/
+
+# Archivos generados de prueba
+*.pdf
+*.png
+__pycache__/
+*.pyc
