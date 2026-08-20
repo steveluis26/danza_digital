@@ -603,32 +603,6 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   .toast.show{opacity:1;}
   .req::after{content:" *";color:#b00;}
   .resalta{color:var(--wine-dark);font-weight:bold;}
-
-  /* ===== RESPONSIVE (movil/tablet chica) ===== */
-  *{box-sizing:border-box;}
-  @media (max-width:650px){
-    body{padding:6px 10px;}
-    .wrap{max-width:100%;padding:14px 10px 90px;}
-    .card{padding:14px;}
-    .card h2{font-size:.95rem;}
-    .row{gap:8px;}
-    .row > div{flex-basis:100%;min-width:0;}
-    label, .field-label{font-size:.82rem;}
-    input, select{font-size:16px;padding:11px;}  /* 16px evita zoom auto en iOS */
-    #pago_detalle input[type=number]{max-width:100%;}
-    .nav-buttons{flex-direction:column-reverse;gap:8px;}
-    .nav-buttons button{width:100%;padding:15px;font-size:1rem;}
-    .topbar{flex-direction:column;gap:6px;padding:10px 12px;text-align:center;}
-    .logo-header{height:46px;}
-    .progress{margin-top:6px;}
-    .doc-page{width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-    .doc-page .title{font-size:.95rem;}
-    .doc-h3{font-size:.82rem;}
-    .checks{gap:6px 12px;}
-    .checks label{font-size:.82rem;}
-    .sigcanvas{height:170px;}
-    .contact-block{padding:10px;}
-  }
 </style>
 </head>
 <body>
@@ -1537,7 +1511,7 @@ async function generatePDF(){
       }
       y += h + 1;
     }
-    y += 18; // separacion explicita despues de la tabla (anexo)
+    y += 8; // separacion explicita despues de la tabla
   }
   function drawSig(block){
     const h3 = block.querySelector('h3');
@@ -1576,10 +1550,7 @@ async function generatePDF(){
     const sub = doc.querySelector('.sub'); if(sub) drawSub(sub.textContent);
     for(const child of Array.from(doc.children)){
       if(child.classList.contains('title') || child.classList.contains('sub')) continue;
-      if(child.classList.contains('doc-h3')){
-        if(/^CLÁUSULAS\s*$/.test(child.textContent.trim())) newPage();
-        drawH3(child.textContent);
-      }
+      if(child.classList.contains('doc-h3')){ drawH3(child.textContent); }
       else if(child.tagName==='UL'){ drawList(child); }
       else if(child.tagName==='TABLE'){ drawTable(child); }
       else if(child.classList.contains('sig-block')){ drawSig(child); }
@@ -1626,20 +1597,14 @@ async function generatePDF(){
 
 
 buildProgress();
-function reflowSigs(){
+window.addEventListener('resize', ()=>{
   Object.keys(pads).forEach(id=>{
     const canvas = document.getElementById(id);
-    if(!canvas) return;
     const data = pads[id].toData();
     resizeCanvas(canvas);
     pads[id].fromData(data);
   });
-}
-window.addEventListener('resize', reflowSigs);
-window.addEventListener('orientationchange', ()=> setTimeout(reflowSigs, 250));
-// reajuste tras carga (el ancho CSS en movil puede fijarse despues del primer layout)
-window.addEventListener('load', ()=> setTimeout(reflowSigs, 100));
-document.addEventListener('DOMContentLoaded', ()=> setTimeout(reflowSigs, 100));
+});
 </script>
 
 </body>
