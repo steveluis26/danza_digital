@@ -1,9 +1,19 @@
 # Entorno de pruebas (Playwright + venv)
 .venv_test/
 test_out/
+*.py
+check18.js
 
-# Archivos generados de prueba
-*.pdf
-*.png
+# Copias y archivos de texto fuente (no son el entregable)
+registro_OFFLINE copia.html
+txt_*.txt
+
+# Sistema / cache
+.DS_Store
 __pycache__/
 *.pyc
+
+# Generados
+*.pdf
+*.png
+!registro_OFFLINE.html
